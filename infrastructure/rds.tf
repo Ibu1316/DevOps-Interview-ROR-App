@@ -8,20 +8,8 @@ resource "aws_db_subnet_group" "this" {
   }
 }
 
-resource "aws_db_instance" "this" {
-  identifier              = "${var.app_name}-db"
-  allocated_storage       = 20
-  engine                  = "postgres"
-  engine_version          = "13.3"
-  instance_class          = "db.t3.micro"
-  name                    = var.rds_db_name
-  username                = var.rds_username
-  password                = var.rds_password
-  port                    = var.rds_port
-  db_subnet_group_name    = aws_db_subnet_group.this.name
-
-}
-  resource "aws_security_group" "rds_sg" {
+# ✅ Move this security group ABOVE aws_db_instance
+resource "aws_security_group" "rds_sg" {
   name        = "${var.app_name}-rds-sg"
   description = "Allow ECS tasks to connect to RDS"
   vpc_id      = module.vpc.vpc_id
@@ -30,7 +18,7 @@ resource "aws_db_instance" "this" {
     from_port       = var.rds_port
     to_port         = var.rds_port
     protocol        = "tcp"
-    security_groups = [aws_security_group.ecs_sg.id]
+    security_groups = [aws_security_group.ecs_sg.id] # make sure this SG is defined elsewhere
   }
 
   egress {
@@ -45,3 +33,25 @@ resource "aws_db_instance" "this" {
   }
 }
 
+resource "aws_db_instance" "this" {
+  identifier              = "${var.app_name}-db"
+  allocated_storage       = 20
+  engine                  = "postgres"
+  engine_version          = "13.3"
+  instance_class          = "db.t3.micro"
+  name                    = var.rds_db_name
+  username                = var.rds_username
+  password                = var.rds_password
+  port                    = var.rds_port
+  db_subnet_group_name    = aws_db_subnet_group.this.name
+  vpc_security_group_ids  = [aws_security_group.rds_sg.id] # ✅ This line was missing
+  skip_final_snapshot     = true
+  publicly_accessible     = false
+  multi_az                = false
+  deletion_protection     = false
+
+  tags = {
+    Name        = "${var.app_name}-rds"
+    Environment = var.environment
+  }
+}
