@@ -19,5 +19,29 @@ resource "aws_db_instance" "this" {
   password                = var.rds_password
   port                    = var.rds_port
   db_subnet_group_name    = aws_db_subnet_group.this.name
-  vpc_security_group_ids  = [aws_security_group.rds_sg.id]
- }
+
+}
+  resource "aws_security_group" "rds_sg" {
+  name        = "${var.app_name}-rds-sg"
+  description = "Allow ECS tasks to connect to RDS"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port       = var.rds_port
+    to_port         = var.rds_port
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.app_name}-rds-sg"
+  }
+}
+
