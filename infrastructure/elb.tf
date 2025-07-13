@@ -65,3 +65,5 @@ resource "aws_lb_listener" "this" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target
+ }
+}
