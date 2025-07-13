@@ -8,7 +8,6 @@ resource "aws_db_subnet_group" "this" {
   }
 }
 
-# ✅ Move this security group ABOVE aws_db_instance
 resource "aws_security_group" "rds_sg" {
   name        = "${var.app_name}-rds-sg"
   description = "Allow ECS tasks to connect to RDS"
