@@ -20,11 +20,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::536697233234:role/Github-OIDC-role
-          role-session-name: GitHubActionsSession
-          aws-region: us-east-1
+  uses: aws-actions/configure-aws-credentials@v4
+  with:
+    role-to-assume: arn:aws:iam::536697233234:role/Github-OIDC-role
+    role-session-name: GitHubActionsSession
+    aws-region: us-east-1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
