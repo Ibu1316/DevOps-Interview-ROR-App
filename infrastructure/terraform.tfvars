@@ -1,3 +1,7 @@
 aws_region  = "us-east-1"
 app_name    = "ror-app"
 environment = "dev"
+rds_db_name     = "Devopsappdb"
+rds_username    = "admin"
+rds_password    = "Nopass@542165"
+rds_port        = "5432"
