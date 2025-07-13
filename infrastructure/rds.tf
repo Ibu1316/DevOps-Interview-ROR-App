@@ -36,7 +36,7 @@ resource "aws_db_instance" "this" {
   identifier              = "${var.app_name}-db"
   allocated_storage       = 20
   engine                  = "postgres"
-  engine_version          = "13.3"
+  engine_version          = "13.4"
   instance_class          = "db.t3.micro"
   username                = var.rds_username
   password                = var.rds_password
