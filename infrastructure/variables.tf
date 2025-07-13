@@ -20,12 +20,7 @@ variable "rds_db_name" {}
 variable "rds_username" {}
 variable "rds_password" {}
 variable "rds_hostname" {}
-variable "rds_port" {}
 variable "lb_endpoint" {}
-
-variable "rds_db_name"    {}
-variable "rds_username"   {}
-variable "rds_password"   {}
 variable "rds_port" {
   default = "5432"
 }
