@@ -22,7 +22,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::536697233234:role/Github-OIDC-role
+          role-to-assume: arn:aws:iam::accountID:role/Github-OIDC-role----change the account ID here
           role-session-name: GitHubActionsSession
           aws-region: us-east-1
 
