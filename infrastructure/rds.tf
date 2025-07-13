@@ -39,7 +39,6 @@ resource "aws_db_instance" "this" {
   engine                  = "postgres"
   engine_version          = "13.3"
   instance_class          = "db.t3.micro"
-  name                    = var.rds_db_name
   username                = var.rds_username
   password                = var.rds_password
   port                    = var.rds_port
