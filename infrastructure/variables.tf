@@ -9,3 +9,8 @@ variable "app_name" {
 variable "environment" {
   default = "dev"
 }
+
+variable "s3_bucket_name" {
+  default = "ror-app-storage-bucket"
+}
+
