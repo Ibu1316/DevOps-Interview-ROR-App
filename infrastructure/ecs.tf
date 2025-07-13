@@ -13,34 +13,32 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([
     {
-      name  = "rails_app",
-      image = "${var.ecr_repo_rails}:latest",
+      name  = "rails_app"
+      image = "${var.ecr_repo_rails}:latest"
       portMappings = [
         {
           containerPort = 3000
-          hostPort      = 3000
         }
-      ],
+      ]
       environment = [
-        { name = "RDS_DB_NAME",       value = var.rds_db_name },
-        { name = "RDS_USERNAME",      value = var.rds_username },
-        { name = "RDS_PASSWORD",      value = var.rds_password },
-        { name = "RDS_HOSTNAME",      value = aws_db_instance.this.endpoint },
-        { name = "RDS_PORT",          value = var.rds_port },
-        { name = "S3_BUCKET_NAME",    value = var.s3_bucket_name },
-        { name = "S3_REGION_NAME",    value = var.aws_region },
-        { name = "LB_ENDPOINT",       value = aws_lb.this.dns_name },
+        { name = "RDS_DB_NAME",    value = var.rds_db_name },
+        { name = "RDS_USERNAME",   value = var.rds_username },
+        { name = "RDS_PASSWORD",   value = var.rds_password },
+        { name = "RDS_HOSTNAME",   value = aws_db_instance.this.endpoint },
+        { name = "RDS_PORT",       value = tostring(var.rds_port) },
+        { name = "S3_BUCKET_NAME", value = var.s3_bucket_name },
+        { name = "S3_REGION_NAME", value = var.aws_region },
+        { name = "LB_ENDPOINT",    value = aws_lb.this.dns_name }
       ]
     },
     {
-      name  = "nginx",
-      image = "${var.ecr_repo_nginx}:latest",
+      name  = "nginx"
+      image = "${var.ecr_repo_nginx}:latest"
       portMappings = [
         {
           containerPort = 80
-          hostPort      = 80
         }
-      ],
+      ]
       links = ["rails_app"]
     }
   ])
