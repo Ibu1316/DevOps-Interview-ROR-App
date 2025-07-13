@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "tf_state" {
   }
 }
 
-# ✅ Separate encryption configuration (new recommended way)
+# Separate encryption configuration (new recommended way)
 resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_sse" {
   bucket = aws_s3_bucket.tf_state.bucket
 
