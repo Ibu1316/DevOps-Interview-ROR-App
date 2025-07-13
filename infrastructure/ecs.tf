@@ -25,11 +25,11 @@ resource "aws_ecs_task_definition" "this" {
         { name = "RDS_DB_NAME",       value = var.rds_db_name },
         { name = "RDS_USERNAME",      value = var.rds_username },
         { name = "RDS_PASSWORD",      value = var.rds_password },
-        { name = "RDS_HOSTNAME",      value = var.rds_hostname },
+        { name = "RDS_HOSTNAME",      value = aws_db_instance.this.endpoint },
         { name = "RDS_PORT",          value = var.rds_port },
         { name = "S3_BUCKET_NAME",    value = var.s3_bucket_name },
         { name = "S3_REGION_NAME",    value = var.aws_region },
-        { name = "LB_ENDPOINT",       value = var.lb_endpoint }
+        { name = "LB_ENDPOINT",       value = aws_lb.this.dns_name },
       ]
     },
     {
