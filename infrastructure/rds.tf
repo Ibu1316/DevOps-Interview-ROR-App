@@ -19,4 +19,4 @@ resource "aws_db_instance" "this" {
   password                = var.rds_password
   port                    = var.rds_port
   db_subnet_group_name    = aws_db_subnet_group.this.name
-  vpc_security_group_ids  = [aws]()_
+  vpc_security_group_ids  = [aws_security_group.rds_sg.id]
