@@ -3,7 +3,7 @@ name: Terraform Deployment
 on:
   push:
     branches:
-      - main  # or whichever branch you use
+      - main 
   workflow_dispatch:  # allows manual runs from GitHub UI
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/<YOUR_GITHUB_ACTIONS_ROLE>
+          role-to-assume: arn:aws:iam::536697233234:role/arn:aws:iam::536697233234:role/Github-OIDC-role
           role-session-name: GitHubActionsSession
           aws-region: us-east-1
 
