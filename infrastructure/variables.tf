@@ -2,6 +2,11 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "public_subnets" {
+  description = "List of public subnet CIDR blocks"
+  type        = list(string)
+}
+
 variable "app_name" {
   default = "Devops-app"
 }
