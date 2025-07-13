@@ -40,20 +40,10 @@ variable "rds_password" {
   sensitive   = true
 }
 
-variable "rds_hostname" {
-  description = "RDS endpoint hostname"
-  type        = string
-}
-
 variable "rds_port" {
   description = "Port number for the RDS PostgreSQL database"
   type        = number
   default     = 5432
-}
-
-variable "lb_endpoint" {
-  description = "DNS endpoint of the Load Balancer (without http)"
-  type        = string
 }
 
 
