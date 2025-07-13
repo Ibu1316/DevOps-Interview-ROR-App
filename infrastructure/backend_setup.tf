@@ -1,21 +1,27 @@
-# S3 bucket for storing remote state fiel
 resource "aws_s3_bucket" "tf_state" {
-  bucket = "devopss3-ror-app-tfstate-bucket"
+  bucket = "devops-ror-app-tfstate-bucket"  # Ensure this name is globally unique
 
   versioning {
     enabled = true
   }
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
-    }
+  lifecycle {
+    prevent_destroy = false
   }
 
   tags = {
     Name = "Terraform State Bucket"
+  }
+}
+
+# ✅ Separate encryption configuration (new recommended way)
+resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_sse" {
+  bucket = aws_s3_bucket.tf_state.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
   }
 }
 
