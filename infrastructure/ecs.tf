@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "this" {
         { name = "LB_ENDPOINT",    value = aws_lb.this.dns_name }
       ]
     },
-    {
+      {
       name  = "nginx"
       image = "${var.ecr_repo_nginx}:latest"
       portMappings = [
@@ -39,7 +39,13 @@ resource "aws_ecs_task_definition" "this" {
           containerPort = 80
         }
       ]
-      links = ["rails_app"]
+      # Removed `links`, use localhost if nginx proxies to rails_app
+      dependsOn = [
+        {
+          containerName = "rails_app"
+          condition     = "START"
+        }
+      ]
     }
   ])
 }
