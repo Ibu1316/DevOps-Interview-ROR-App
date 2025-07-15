@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "tf_state" {
-  bucket = "devops-ror-app-tfstate-bucket"  # Ensure this name is globally unique
-
+  bucket = "devops-ror-app-tfstate-bucket"
   versioning {
     enabled = true
   }
