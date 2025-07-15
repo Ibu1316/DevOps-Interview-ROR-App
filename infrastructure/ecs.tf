@@ -2,14 +2,19 @@ resource "aws_ecs_cluster" "this" {
   name = "${var.app_name}-cluster"
 }
 
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name              = "/ecs/${var.app_name}"
+  retention_in_days = 1  # Optional: adjust retention as needed
+}
+
 resource "aws_ecs_task_definition" "this" {
   family                   = "${var.app_name}-task"
   requires_compatibilities = ["FARGATE"]
-  network_mode            = "awsvpc"
-  cpu                     = "512"
-  memory                  = "1024"
-  execution_role_arn      = aws_iam_role.ecs_task_execution_role.arn
-  task_role_arn           = aws_iam_role.ecs_task_execution_role.arn
+  network_mode             = "awsvpc"
+  cpu                      = "512"
+  memory                   = "1024"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn
 
   container_definitions = jsonencode([
     {
@@ -30,8 +35,16 @@ resource "aws_ecs_task_definition" "this" {
         { name = "S3_REGION_NAME", value = var.aws_region },
         { name = "LB_ENDPOINT",    value = aws_lb.this.dns_name }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.app_name}"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "rails"
+        }
+      }
     },
-      {
+    {
       name  = "nginx"
       image = "${var.ecr_repo_nginx}:latest"
       portMappings = [
@@ -39,16 +52,24 @@ resource "aws_ecs_task_definition" "this" {
           containerPort = 80
         }
       ]
-      # Removed `links`, use localhost if nginx proxies to rails_app
       dependsOn = [
         {
           containerName = "rails_app"
           condition     = "START"
         }
       ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.app_name}"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "nginx"
+        }
+      }
     }
   ])
 }
+
 
 resource "aws_ecs_service" "this" {
   name            = "${var.app_name}-service"
